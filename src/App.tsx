@@ -44,7 +44,7 @@ export default function App() {
     return obj.filter((product) => product[key] === value);
   }
 
-  const filteredProducts = filterProduct(productList, "price", 200);
+  const filteredProducts = filterProduct(productList, "price", filterValue);
 
   console.log(filteredProducts);
   return (
