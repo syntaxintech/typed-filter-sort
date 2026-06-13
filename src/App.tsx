@@ -40,19 +40,23 @@ export default function App() {
     },
   ]);
 
+  // This function takes in 3 parameters(the product array, property in the object and the value a key represents)
   function filterProduct<T extends object, K extends keyof T>(
     obj: T[],
     key: K,
     value: T[K],
   ): T[] {
     return obj.filter((product) => product[key] === value);
+    // Line 49 is where the filtering happens. We use the filter method to iterate through each product in the array and check if the value of the specified key matches the provided value. If it does, that product is included in the resulting array.
   }
 
+  // line 55 is where we assign the input value we are bringing in and changing it into a number type because value from the input is always a string and we want to compare it with the price and inStock properties which are of type number. We check if the dropdownValue is either "price" or "inStock", if it is, we convert the filterValue to a number using the Number() function. Otherwise, we keep it as a string.
   let searchValue: string | number = filterValue;
   if (dropdownValue === "price" || dropdownValue === "inStock") {
     searchValue = Number(filterValue);
   }
 
+  // we call the filterProduct function and pass in the productList, dropdownValue, and searchValue as arguments. The result is stored in the filteredProducts variable, which will contain the products that match the specified filter criteria. We then render the filtered products in a list below the input fields.
   const filteredProducts = filterProduct(
     productList,
     dropdownValue,
@@ -64,7 +68,7 @@ export default function App() {
       <h1>Filter Mode:</h1>
       <select
         value={dropdownValue}
-        onChange={(e) => setDropdownValue(e.target.value as Dropdown)}
+        onChange={(e) => setDropdownValue(e.target.value as Dropdown)} // we cast the value of the selected option to the Dropdown type because the value from the
       >
         <option value="">Filter by...</option>
         <option value="name">Filter by name</option>
