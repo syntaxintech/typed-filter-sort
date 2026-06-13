@@ -7,8 +7,12 @@ interface Product {
   category: string;
 }
 
+type Dropdown = keyof Product;
+
 export default function App() {
-  const [filterValue, setFilterValue] = useState<string>("");
+  const [filterValue, setFilterValue] = useState("");
+  const [dropdownValue, setDropdownValue] = useState<Dropdown>("name");
+
   const [productList, setProductList] = useState<Product[]>([
     {
       name: "iphone 12pro",
@@ -44,25 +48,40 @@ export default function App() {
     return obj.filter((product) => product[key] === value);
   }
 
-  const filteredProducts = filterProduct(productList, "price", filterValue);
+  let searchValue: string | number = filterValue;
+  if (dropdownValue === "price" || dropdownValue === "inStock") {
+    searchValue = Number(filterValue);
+  }
 
-  console.log(filteredProducts);
+  const filteredProducts = filterProduct(
+    productList,
+    dropdownValue,
+    searchValue,
+  );
+
   return (
     <div>
       <h1>Filter Mode:</h1>
       <select
-        value={filterValue}
-        onChange={(e) => setFilterValue(e.target.value)}
+        value={dropdownValue}
+        onChange={(e) => setDropdownValue(e.target.value as Dropdown)}
       >
         <option value="">Filter by...</option>
-        <option value="200">Filter by price</option>
+        <option value="name">Filter by name</option>
+        <option value="price">Filter by price</option>
         <option value="category">Filter by category</option>
         <option value="inStock">Filter by number</option>
       </select>
 
-      <h1>.</h1>
+      <input
+        type="text"
+        value={filterValue}
+        onChange={(e) => setFilterValue(e.target.value)}
+      />
+
+      <h1>Filtered Products:</h1>
       <ul>
-        {productList.map((product) => (
+        {filteredProducts.map((product) => (
           <li key={product.name}>{product.name}</li>
         ))}
       </ul>
